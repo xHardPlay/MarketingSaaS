@@ -33,10 +33,6 @@ imageInput.addEventListener('change', (e) => {
         alert('Please upload a valid image file.');
         return;
     }
-    if (file.size > 1024 * 1024 * 1) { // 1MB
-        alert('Image file size should not exceed 1MB.');
-        return;
-    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -58,10 +54,6 @@ logoInput.addEventListener('change', (e) => {
     // Validation
     if (!file.type.startsWith('image/')) {
         alert('Please upload a valid image file for logo.');
-        return;
-    }
-    if (file.size > 1024 * 1024 * 1) { // 1MB
-        alert('Logo file size should not exceed 1MB.');
         return;
     }
 
