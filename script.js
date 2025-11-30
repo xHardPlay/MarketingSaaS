@@ -14,6 +14,9 @@ const logoY = document.getElementById('logo-y');
 const logoSize = document.getElementById('logo-size');
 const logoOpacity = document.getElementById('logo-opacity');
 const downloadBtn = document.getElementById('download-btn');
+const textFont = document.getElementById('text-font');
+const saveBtn = document.getElementById('save-settings');
+const loadInput = document.getElementById('load-settings');
 
 // Image data
 let backgroundImage = null;
@@ -70,9 +73,10 @@ logoInput.addEventListener('change', (e) => {
 });
 
 // Add event listeners for all text and logo controls to re-render on change
-[textInput, textX, textY, textSize, textColor, logoX, logoY, logoSize, logoOpacity].forEach(el => {
+[textInput, textX, textY, textSize, textColor, textFont, logoX, logoY, logoSize, logoOpacity].forEach(el => {
     el.addEventListener('input', renderCanvas);
     el.addEventListener('change', renderCanvas);
+    el.addEventListener('click', renderCanvas);
 });
 
 // Function to render the canvas
@@ -100,7 +104,7 @@ function renderCanvas() {
     const text = textInput.value;
     if (text) {
         ctx.fillStyle = textColor.value;
-        ctx.font = `${textSize.value}px Arial`;
+        ctx.font = `${textSize.value}px ${textFont.value}`;
         ctx.fillText(text, parseInt(textX.value), parseInt(textY.value));
     }
 }
@@ -115,6 +119,64 @@ downloadBtn.addEventListener('click', () => {
     link.download = 'designed-image.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
+});
+
+// Save settings functionality
+saveBtn.addEventListener('click', () => {
+    const settings = {
+        textInput: textInput.value,
+        textX: textX.value,
+        textY: textY.value,
+        textSize: textSize.value,
+        textColor: textColor.value,
+        textFont: textFont.value,
+        logoX: logoX.value,
+        logoY: logoY.value,
+        logoSize: logoSize.value,
+        logoOpacity: logoOpacity.value
+    };
+    const json = JSON.stringify(settings, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'settings.json';
+    link.click();
+});
+
+// Load settings functionality
+loadInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type || !file.type.includes('json')) {
+        alert('Please select a valid JSON file.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const settings = JSON.parse(e.target.result);
+            // Apply settings
+            textInput.value = settings.textInput || '';
+            textX.value = settings.textX || 50;
+            textY.value = settings.textY || 100;
+            textSize.value = settings.textSize || 30;
+            textColor.value = settings.textColor || '#000000';
+            textFont.value = settings.textFont || 'Arial';
+            logoX.value = settings.logoX || 600;
+            logoY.value = settings.logoY || 50;
+            logoSize.value = settings.logoSize || 20;
+            logoOpacity.value = settings.logoOpacity || 1;
+
+            // Re-render with new settings
+            renderCanvas();
+            alert('Settings loaded successfully.');
+        } catch (error) {
+            alert('Error loading settings: Invalid JSON file.');
+        }
+    };
+    reader.readAsText(file);
 });
 
 // Initial render (empty canvas)
