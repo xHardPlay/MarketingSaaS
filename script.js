@@ -90,11 +90,10 @@ function renderCanvas() {
 
     // Draw background image if loaded
     if (backgroundImage) {
-        // Scale to fit canvas
-        const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
-        const x = (canvas.width - backgroundImage.width * scale) / 2;
-        const y = (canvas.height - backgroundImage.height * scale) / 2;
-        ctx.drawImage(backgroundImage, x, y, backgroundImage.width * scale, backgroundImage.height * scale);
+        // Draw at original size, centered (may be clipped if larger than canvas)
+        const x = (canvas.width - backgroundImage.width) / 2;
+        const y = (canvas.height - backgroundImage.height) / 2;
+        ctx.drawImage(backgroundImage, x, y);
     }
 
     // Draw logo if loaded, with opacity and size
