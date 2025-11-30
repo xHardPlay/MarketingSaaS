@@ -17,13 +17,10 @@ const downloadBtn = document.getElementById('download-btn');
 const textFont = document.getElementById('text-font');
 const saveBtn = document.getElementById('save-settings');
 const loadInput = document.getElementById('load-settings');
-const xlsxInput = document.getElementById('xlsx-upload');
-const rowsSummary = document.getElementById('rows-summary');
 
 // Image data
 let backgroundImage = null;
 let logoImage = null;
-let rowsData = [];
 
 // Set canvas size (can be adjusted for better UX)
 canvas.width = 800;
@@ -81,73 +78,6 @@ logoInput.addEventListener('change', (e) => {
     el.addEventListener('change', renderCanvas);
     el.addEventListener('click', renderCanvas);
 });
-
-// Parse XLSX file and display summary
-xlsxInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-        const data = await file.arrayBuffer();
-        const workbook = XLSX.read(data);
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const json = XLSX.utils.sheet_to_json(worksheet);
-        rowsData = json;
-        displayRowsSummary(json);
-    } catch (error) {
-        alert('Error parsing XLSX file. Please ensure it is a valid Excel file.');
-    }
-});
-
-// Display rows summary
-function displayRowsSummary(rows) {
-    rowsSummary.innerHTML = '<table><tr><th>Row</th><th>Client Company Name</th><th>Job Description</th><th>Slogan</th><th>ImageFileName</th><th>Action</th></tr></table>';
-    rows.forEach((row, index) => {
-        const tr = `<tr>
-            <td>${index + 1}</td>
-            <td>${row['Client Company Name'] || ''}</td>
-            <td>${row['Job Description'] || ''}</td>
-            <td>${row.Slogan || ''}</td>
-            <td>${row.ImageFileName || ''}</td>
-            <td><button data-row="${index}">Select</button></td>
-        </tr>`;
-        rowsSummary.querySelector('table').insertAdjacentHTML('beforeend', tr);
-    });
-
-    // Add click listener for select buttons
-    rowsSummary.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            const index = e.target.dataset.row;
-            selectRow(index);
-        }
-    });
-}
-
-// Select row and auto-fill
-function selectRow(index) {
-    const row = rowsData[index];
-    if (row) {
-        // Set slogan as default text
-        textInput.value = row.Slogan || '';
-
-        // Load image from images/ directory
-        const imgFile = row.ImageFileName;
-        if (imgFile) {
-            const img = new Image();
-            img.onload = () => {
-                backgroundImage = img;
-                renderCanvas();
-            };
-            img.onerror = () => {
-                alert(`Image file "${imgFile}" not found in /images/ directory.`);
-            };
-            img.src = 'images/' + imgFile;
-        }
-
-        renderCanvas();
-    }
-}
 
 // Function to render the canvas
 function renderCanvas() {

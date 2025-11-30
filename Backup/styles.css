@@ -19,56 +19,23 @@ h1 {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.xlsx-upload-section, .upload-section {
+.upload-section {
     margin-bottom: 20px;
 }
 
-.xlsx-upload-section label, .upload-section label {
+.upload-section label {
     display: block;
     margin-bottom: 10px;
     font-weight: bold;
 }
 
-.xlsx-upload-section input[type="file"], .upload-section input[type="file"] {
+.upload-section input[type="file"] {
     padding: 10px;
     border: 2px dashed #ccc;
     border-radius: 4px;
     display: block;
     margin: 0 auto;
     max-width: 300px;
-}
-
-#rows-summary {
-    margin: 20px 0;
-}
-
-#rows-summary table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-#rows-summary th, #rows-summary td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-#rows-summary th {
-    background-color: #f2f2f2;
-}
-
-#rows-summary button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#rows-summary button:hover {
-    background-color: #0056b3;
 }
 
 .canvas-section {
