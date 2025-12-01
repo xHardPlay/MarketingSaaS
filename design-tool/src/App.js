@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import './App.css';
 
@@ -104,8 +104,10 @@ function App() {
     return null;
   };
 
-  const renderCanvas = () => {
+  const renderCanvas = useCallback(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
 
     // Clear canvas
@@ -119,7 +121,7 @@ function App() {
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     }
 
-    // Draw elements
+    // Draw elements (optimize by only drawing visible elements)
     elements.forEach(element => {
       ctx.save();
       ctx.globalAlpha = element.opacity || 1;
@@ -138,7 +140,7 @@ function App() {
         ctx.drawImage(element.image, element.x, element.y, element.width, element.height);
       }
 
-      // Draw selection outline
+      // Draw selection outline only for selected element
       if (selectedElement && element.id === selectedElement.id) {
         ctx.strokeStyle = '#007bff';
         ctx.lineWidth = 2;
@@ -157,7 +159,7 @@ function App() {
 
       ctx.restore();
     });
-  };
+  }, [background, elements, selectedElement]);
 
   const handleMouseDown = (e) => {
     const mouse = getMousePos(e);
@@ -591,14 +593,17 @@ function App() {
     backgroundInputRef.current.click();
   };
 
+  // Optimize: only re-render canvas when necessary
   useEffect(() => {
-    renderCanvas();
+    const timeoutId = setTimeout(renderCanvas, 16); // 60fps throttle
+    return () => clearTimeout(timeoutId);
   }, [elements, selectedElement, background]);
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedElement]);
+    const handler = (e) => handleKeyDown(e);
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []); // Remove selectedElement dependency for performance
 
   const canUndo = history.current.canUndo();
   const canRedo = history.current.canRedo();

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Graphic Design Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- App bar -->
+    <header class="app-bar">
+        <div class="app-bar-content">
+            <h1 class="app-title">Simple Graphic Design Tool</h1>
+            <div class="app-bar-actions">
+                <!-- Future actions here -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main layout -->
+    <main class="app-main">
+        <!-- Left panel: Data & Presets -->
+        <aside class="left-panel">
+            <section class="panel-card">
+                <h2>Client Data</h2>
+                <div class="upload-section">
+                    <label for="xlsx-upload">Upload XLSX File:</label>
+                    <input type="file" id="xlsx-upload" accept=".xlsx,.xls">
+                    <div class="upload-feedback"></div>
+                </div>
+            </section>
+
+            <section class="panel-card">
+                <h2>Clients</h2>
+                <div id="rows-summary" class="client-table-container">
+                    <!-- Client table will be inserted here -->
+                </div>
+            </section>
+
+            <section class="panel-card">
+                <h2>Settings</h2>
+                <div class="settings-group">
+                    <button id="save-settings" class="btn btn-secondary">Save Settings (JSON)</button>
+                    <div class="file-input-group">
+                        <label for="load-settings">Load Settings:</label>
+                        <input type="file" id="load-settings" accept=".json">
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Center panel: Canvas -->
+        <section class="center-panel">
+            <div class="canvas-container">
+                <div class="canvas-toolbar">
+                    <button id="add-text-btn" class="btn btn-primary">
+                        <span class="btn-icon">+</span>
+                        Add Text
+                    </button>
+                    <button id="add-logo-btn" class="btn btn-primary">
+                        <span class="btn-icon">🖼️</span>
+                        Add Logo
+                    </button>
+                    <button id="delete-element-btn" class="btn btn-destructive">
+                        <span class="btn-icon">🗑️</span>
+                        Delete Selected
+                    </button>
+                    <div class="toolbar-spacer"></div>
+                    <button id="download-btn" class="btn btn-secondary">
+                        <span class="btn-icon">⬇️</span>
+                        Download Image
+                    </button>
+                </div>
+
+                <div class="canvas-card">
+                    <canvas id="canvas"></canvas>
+                </div>
+
+                <div class="canvas-size-controls">
+                    <label for="canvas-width">Canvas Size</label>
+                    <div class="size-inputs">
+                        <input type="number" id="canvas-width" value="800" min="100" max="2000" step="50">
+                        <span>×</span>
+                        <input type="number" id="canvas-height" value="600" min="100" max="2000" step="50">
+                        <button id="resize-canvas" class="btn btn-secondary size-btn">Resize</button>
+                    </div>
+                    <div class="preset-buttons">
+                        <button id="preset-instagram" class="btn-preset">Instagram (1080×1080)</button>
+                        <button id="preset-instagram-story" class="btn-preset">Story (1080×1920)</button>
+                        <button id="preset-facebook" class="btn-preset">Facebook (1200×630)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right panel: Properties Inspector -->
+        <aside class="right-panel">
+            <!-- Text Properties -->
+            <section class="panel-card collapsible">
+                <div class="card-header">
+                    <h2>Text Properties</h2>
+                    <span class="collapse-icon">▸</span>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="text-input">Content</label>
+                        <textarea id="text-input" placeholder="Enter text" rows="1"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="text-font">Font Family</label>
+                        <select id="text-font">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times</option>
+                            <option value="Courier New">Courier</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Verdana">Verdana</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Impact">Impact</option>
+                            <option value="Comic Sans MS">Comic Sans</option>
+                            <option value="Trebuchet MS">Trebuchet MS</option>
+                            <option value="Lucida Sans">Lucida Sans</option>
+                            <option value="Tahoma">Tahoma</option>
+                            <option value="Open Sans">Open Sans</option>
+                            <option value="Montserrat">Montserrat</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="text-size">Size (px)</label>
+                            <div class="control-group">
+                                <input type="range" id="text-size-slider" min="10" max="100" value="45">
+                                <input type="number" id="text-size" min="10" max="100" value="45">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="text-x">Position X</label>
+                            <div class="control-group">
+                                <input type="range" id="text-x-slider" min="0" max="800" value="50">
+                                <input type="number" id="text-x" min="0" max="800" value="50">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text-y">Position Y</label>
+                            <div class="control-group">
+                                <input type="range" id="text-y-slider" min="0" max="600" value="100">
+                                <input type="number" id="text-y" min="0" max="600" value="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="text-color">Text Color</label>
+                        <div class="color-group">
+                            <input type="color" id="text-color" value="#000000">
+                            <button class="color-btn" data-color="#000000">⬛</button>
+                            <button class="color-btn" data-color="#ffffff">⬜</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label for="text-outline" class="checkbox-label">
+                            <input type="checkbox" id="text-outline">
+                            <span class="checkmark"></span>
+                            Add Outline
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Image Properties -->
+            <section class="panel-card collapsible">
+                <div class="card-header">
+                    <h2>Image Properties</h2>
+                    <span class="collapse-icon">▸</span>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="logo-upload">Upload Logo</label>
+                        <input type="file" id="logo-upload" accept="image/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logo-tint">Tint Color</label>
+                        <input type="color" id="logo-tint" value="#ffffff">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="logo-x">Position X</label>
+                            <input type="number" id="logo-x" value="600" min="0" max="800">
+                        </div>
+                        <div class="form-group">
+                            <label for="logo-y">Position Y</label>
+                            <input type="number" id="logo-y" value="50" min="0" max="600">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logo-size">Size (%)</label>
+                        <input type="number" id="logo-size" value="20" min="5" max="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logo-opacity">Opacity</label>
+                        <input type="range" id="logo-opacity" min="0.1" max="1" step="0.1" value="1">
+                        <span class="range-value">100%</span>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <script src="js/global-vars.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/elements.js"></script>
+    <script src="js/canvas-render.js"></script>
+    <script src="js/canvas-controls.js"></script>
+    <script src="js/ui-controls.js"></script>
+    <script src="js/canvas-interactions.js"></script>
+    <script src="js/file-handling.js"></script>
+    <script src="js/script.js"></script>
+
+    <!-- Layout hooks for collapsible sections and range updates -->
+    <script>
+        // Handle collapsible sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(section => {
+                const header = section.querySelector('.card-header');
+                const body = section.querySelector('.card-body');
+                if (header && body) {
+                    header.addEventListener('click', function() {
+                        section.classList.toggle('collapsed');
+                    });
+                }
+            });
+
+            // Update range value displays
+            const rangeInputs = document.querySelectorAll('input[type="range"]');
+            rangeInputs.forEach(range => {
+                const updateValue = function() {
+                    const value = range.value;
+                    let display = range.parentElement.querySelector('.range-value');
+                    if (display && range.id === 'logo-opacity') {
+                        display.textContent = (value * 100) + '%';
+                    }
+                };
+                range.addEventListener('input', updateValue);
+                updateValue(); // Initial update
+            });
+        });
+    </script>
+</body>
+</html>
