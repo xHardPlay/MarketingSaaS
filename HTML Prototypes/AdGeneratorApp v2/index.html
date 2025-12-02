@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- App bar -->
+    <header class="app-bar">
+        <div class="app-bar-content">
+            <h1 class="app-title">Ad Generator</h1>
+            <div class="app-bar-actions">
+                <!-- Regresar a modo admin? -->
+                <a href="admin.html" class="btn btn-secondary">Admin Mode</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hidden canvas for rendering -->
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <!-- Main layout -->
+    <main class="user-main">
+        <div class="user-container">
+            <section class="user-panel">
+                <div class="panel-card">
+                    <h2>Upload Your Sheet</h2>
+                    <div class="upload-section">
+                        <label for="xlsx-upload">Select XLSX File:</label>
+                        <input type="file" id="xlsx-upload" accept=".xlsx,.xls">
+                        <div class="upload-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <h2>Batch Processing</h2>
+                    <button id="generate-all-btn" class="btn btn-secondary large-btn" disabled>Regenerate All Ads</button>
+                    <div id="batch-feedback"></div>
+                </div>
+
+                <!-- Ad Previews -->
+                <div id="ad-previews" class="ad-previews-user" style="display: none;">
+                    <h3>Generated Ads Preview</h3>
+                    <div id="previews-container"></div>
+                    <button id="download-all-btn" class="btn btn-primary large-btn">Download All Ads (ZIP)</button>
+                    <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>GHL Export</button>
+                </div>
+
+                <!-- Modal for viewing full ad -->
+                <div id="ad-modal" class="modal" style="display: none;">
+                    <div class="modal-content modal-split">
+                        <span id="modal-close" class="modal-close">&times;</span>
+                        <div class="modal-left">
+                            <img id="modal-image" class="modal-image" src="" alt="Full Ad View">
+                        </div>
+                        <div class="modal-right">
+                            <h4>Ad Details</h4>
+                            <div id="modal-ad-data"></div>
+                        </div>
+                        <div class="modal-actions">
+                            <button id="modal-download-btn" class="btn btn-primary">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="js/global-vars.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/elements.js"></script>
+    <script src="js/canvas-render.js"></script>
+    <script src="js/xlsx-handling.js"></script>
+    <script src="js/batch-generation.js"></script>
+
+    <!-- Simple modal handling -->
+    <script>
+        // Modal functionality for viewing full ads
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('ad-modal');
+            const modalImg = document.getElementById('modal-image');
+            const modalDownloadBtn = document.getElementById('modal-download-btn');
+            const modalClose = document.getElementById('modal-close');
+
+            // Close modal when clicking x or outside
+            modalClose.onclick = function() {
+                modal.style.display = "none";
+            };
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Download modal image
+            modalDownloadBtn.onclick = function() {
+                // Assume modalDownloadBtn has data-url set
+                const url = modalImg.src;
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'generated_ad.png';
+                a.click();
+            };
+        });
+    </script>
+</body>
+</html>
