@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Generator</title>
+    <link rel="stylesheet" href="CSS/variables.css">
+    <link rel="stylesheet" href="CSS/base.css">
+    <link rel="stylesheet" href="CSS/layout.css">
+    <link rel="stylesheet" href="CSS/components.css">
+    <link rel="stylesheet" href="CSS/canvas.css">
+    <link rel="stylesheet" href="CSS/modal.css">
+    <link rel="stylesheet" href="CSS/user-interface.css">
+    <link rel="stylesheet" href="CSS/hero.css">
+    <link rel="stylesheet" href="CSS/responsive.css">
+</head>
+<body>
+    <!-- App bar -->
+    <header class="app-bar">
+        <div class="app-bar-content">
+            <h1 class="app-title">Ad Generator</h1>
+            <div class="app-bar-actions">
+                <!-- Regresar a modo admin? -->
+                <a href="admin.html" class="btn btn-secondary">Admin Mode</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hidden canvas for rendering -->
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <!-- Hero Landing Section -->
+    <section class="hero-landing">
+        <div class="hero-content">
+            <h1 class="hero-title"> transform your data into stunning ads <span class="hero-accent">instantly</span></h1>
+            <p class="hero-description">
+                Upload your Excel sheet with client information, slogans, and images.
+                Our AI-powered tool will automatically generate professional social media ads
+                that capture attention and drive results.
+            </p>
+                <div class="hero-features">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <span>Lightning Fast</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <span>Professional Design</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📦</div>
+                    <span>Batch Processing</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💾</div>
+                    <span>ZIP Download</span>
+                </div>
+            </div>
+
+            <!-- Hero Upload Section - Primary CTA -->
+            <div class="hero-cta-section">
+                <div class="hero-upload-wrapper">
+                    
+
+                    <label class="primary-upload-btn hero-upload-btn" for="xlsx-upload">
+                        <div class="upload-icon">🚀</div>
+                        <div class="upload-text">Start Creating Ads</div>
+                        <div class="upload-hint">Upload Excel → Get Professional Ads</div>
+                    </label>
+
+                    <input type="file" id="xlsx-upload" accept=".xlsx,.xls" style="display: none;">
+                    <div class="upload-feedback"></div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="preview-mockup">
+                <div class="mockup-device"></div>
+                <div class="mockup-screen">
+                    <div class="mockup-ad">
+                        <div class="mockup-bg"></div>
+                        <div class="mockup-content">
+                            <div class="mockup-logo">🏢</div>
+                            <div class="mockup-text">
+                                <div class="mockup-headline">Transform Your Business</div>
+                                <div class="mockup-slogan">with Professional Ads</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main layout -->
+    <main class="user-main">
+        <div class="user-container">
+            <section class="user-panel">
+
+                <div class="panel-card" id="batch-panel" style="display: none;">
+                    <h2>Batch Processing</h2>
+                    <button id="generate-all-btn" class="btn btn-secondary large-btn" disabled>Regenerate All Ads</button>
+                    <div id="batch-feedback"></div>
+                </div>
+
+                <!-- Ad Previews -->
+                <div id="ad-previews" class="ad-previews-user" style="display: none; align-items: center;">
+                    <h3>Generated Ads Preview</h3>
+                    <div id="previews-container"></div>
+                    <button id="download-all-btn" class="btn btn-primary large-btn" style="margin-top: 30px;align-items: center;">Download All Ads (ZIP)</button>
+                    <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>GHL Export</button>
+                <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>Share</button>
+                </div>
+
+                <!-- Modal for viewing full ad -->
+                <div id="ad-modal" class="modal" style="display: none;">
+                    <div class="modal-content modal-split">
+                        <span id="modal-close" class="modal-close">&times;</span>
+                        <div class="modal-left">
+                            <img id="modal-image" class="modal-image" src="" alt="Full Ad View">
+                        </div>
+                        <div class="modal-right">
+                            <h4>Ad Details</h4>
+                            <div id="modal-ad-data"></div>
+                        </div>
+        <div class="modal-actions">
+            <button id="modal-download-btn" class="btn btn-primary">Download</button>
+            <button id="modal-share-btn" class="btn btn-secondary">Share</button>
+        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="js/global-vars.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/elements.js"></script>
+    <script src="js/canvas-render.js"></script>
+    <script src="js/xlsx-handling.js"></script>
+    <script src="js/batch-generation.js"></script>
+
+    <!-- Simple modal handling -->
+    <script>
+        // Modal functionality for viewing full ads
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('ad-modal');
+            const modalImg = document.getElementById('modal-image');
+            const modalDownloadBtn = document.getElementById('modal-download-btn');
+            const modalShareBtn = document.getElementById('modal-share-btn');
+            const modalClose = document.getElementById('modal-close');
+
+            // Close modal when clicking x or outside
+            modalClose.onclick = function() {
+                modal.style.display = "none";
+            };
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Download modal image
+            modalDownloadBtn.onclick = function() {
+                // Assume modalDownloadBtn has data-url set
+                const url = modalImg.src;
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'generated_ad.png';
+                a.click();
+            };
+
+            // Share modal image
+            modalShareBtn.onclick = function() {
+                const url = modalImg.src;
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Generated Ad',
+                        text: 'Check out this awesome ad I created!',
+                        url: url
+                    });
+                } else {
+                    // Fallback to copying URL to clipboard
+                    navigator.clipboard.writeText(url).then(function() {
+                        alert('Ad image URL copied to clipboard!');
+                    }).catch(function() {
+                        // Fallback for older browsers
+                        alert('Share URL: ' + url);
+                    });
+                }
+            };
+        });
+    </script>
+</body>
+</html>
