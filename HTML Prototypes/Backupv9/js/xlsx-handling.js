@@ -53,6 +53,12 @@ xlsxInput.addEventListener('change', async (e) => {
         rowsData = json;
         if (rowsSummary) displayRowsSummary(json);
 
+        // Show batch processing panel after successful upload
+        const batchPanel = document.getElementById('batch-panel');
+        if (batchPanel) {
+            batchPanel.style.display = 'block';
+        }
+
         // Auto-generate all ads immediately
         await autoGenerateAds(json);
     } catch (error) {
