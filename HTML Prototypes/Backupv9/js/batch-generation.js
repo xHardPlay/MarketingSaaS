@@ -198,7 +198,13 @@ async function generateAdForRow(row, index) {
                 // -------- Slogan panel (bottom) --------
                 const sloganPanelH = 320;
                 const sloganPanelY = 1080 - sloganPanelH;
-                offCtx.fillStyle = 'rgba(0,0,0,0.78)';
+
+                // Create a linear gradient for a more sophisticated look
+                const gradient = offCtx.createLinearGradient(0, sloganPanelY, 0, sloganPanelY + sloganPanelH);
+                gradient.addColorStop(0, 'rgba(0,0,0,0.25)');  // Lighter at top
+                gradient.addColorStop(1, 'rgba(0,0,0,0.95)');  // Darker at bottom
+
+                offCtx.fillStyle = gradient;
                 offCtx.fillRect(0, sloganPanelY, 1080, sloganPanelH);
 
                 // ---- Slogan autofit and truncation ----
