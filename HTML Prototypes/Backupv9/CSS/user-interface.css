@@ -282,10 +282,11 @@
 
 .preview-thumbnail {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 250px;
+  object-fit: contain;
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-md);
+  background: #f8f9fa;
   transition: transform 0.2s ease;
 }
 
@@ -306,7 +307,7 @@
 /* Full screen preview mode */
 #ad-previews.full-screen #previews-container {
   max-width: none;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-xl);
 }
 

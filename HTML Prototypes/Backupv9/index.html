@@ -104,11 +104,12 @@
                 </div>
 
                 <!-- Ad Previews -->
-                <div id="ad-previews" class="ad-previews-user" style="display: none;">
+                <div id="ad-previews" class="ad-previews-user" style="display: none; align-items: center;">
                     <h3>Generated Ads Preview</h3>
                     <div id="previews-container"></div>
-                    <button id="download-all-btn" class="btn btn-primary large-btn">Download All Ads (ZIP)</button>
+                    <button id="download-all-btn" class="btn btn-primary large-btn" style="margin-top: 30px;align-items: center;">Download All Ads (ZIP)</button>
                     <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>GHL Export</button>
+                <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>Share</button>
                 </div>
 
                 <!-- Modal for viewing full ad -->
@@ -122,9 +123,10 @@
                             <h4>Ad Details</h4>
                             <div id="modal-ad-data"></div>
                         </div>
-                        <div class="modal-actions">
-                            <button id="modal-download-btn" class="btn btn-primary">Download</button>
-                        </div>
+        <div class="modal-actions">
+            <button id="modal-download-btn" class="btn btn-primary">Download</button>
+            <button id="modal-share-btn" class="btn btn-secondary">Share</button>
+        </div>
                     </div>
                 </div>
             </section>
@@ -147,6 +149,7 @@
             const modal = document.getElementById('ad-modal');
             const modalImg = document.getElementById('modal-image');
             const modalDownloadBtn = document.getElementById('modal-download-btn');
+            const modalShareBtn = document.getElementById('modal-share-btn');
             const modalClose = document.getElementById('modal-close');
 
             // Close modal when clicking x or outside
@@ -167,6 +170,26 @@
                 a.href = url;
                 a.download = 'generated_ad.png';
                 a.click();
+            };
+
+            // Share modal image
+            modalShareBtn.onclick = function() {
+                const url = modalImg.src;
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Generated Ad',
+                        text: 'Check out this awesome ad I created!',
+                        url: url
+                    });
+                } else {
+                    // Fallback to copying URL to clipboard
+                    navigator.clipboard.writeText(url).then(function() {
+                        alert('Ad image URL copied to clipboard!');
+                    }).catch(function() {
+                        // Fallback for older browsers
+                        alert('Share URL: ' + url);
+                    });
+                }
             };
         });
     </script>
