@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ad Generator</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="CSS/variables.css">
+    <link rel="stylesheet" href="CSS/base.css">
+    <link rel="stylesheet" href="CSS/layout.css">
+    <link rel="stylesheet" href="CSS/components.css">
+    <link rel="stylesheet" href="CSS/canvas.css">
+    <link rel="stylesheet" href="CSS/modal.css">
+    <link rel="stylesheet" href="CSS/user-interface.css">
+    <link rel="stylesheet" href="CSS/hero.css">
+    <link rel="stylesheet" href="CSS/responsive.css">
 </head>
 <body>
     <!-- App bar -->
@@ -21,18 +29,73 @@
     <!-- Hidden canvas for rendering -->
     <canvas id="canvas" style="display:none;"></canvas>
 
+    <!-- Hero Landing Section -->
+    <section class="hero-landing">
+        <div class="hero-content">
+            <h1 class="hero-title"> transform your data into stunning ads <span class="hero-accent">instantly</span></h1>
+            <p class="hero-description">
+                Upload your Excel sheet with client information, slogans, and images.
+                Our AI-powered tool will automatically generate professional social media ads
+                that capture attention and drive results.
+            </p>
+                <div class="hero-features">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <span>Lightning Fast</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <span>Professional Design</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📦</div>
+                    <span>Batch Processing</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💾</div>
+                    <span>ZIP Download</span>
+                </div>
+            </div>
+
+            <!-- Hero Upload Section - Primary CTA -->
+            <div class="hero-cta-section">
+                <div class="hero-upload-wrapper">
+                    
+
+                    <label class="primary-upload-btn hero-upload-btn" for="xlsx-upload">
+                        <div class="upload-icon">🚀</div>
+                        <div class="upload-text">Start Creating Ads</div>
+                        <div class="upload-hint">Upload Excel → Get Professional Ads</div>
+                    </label>
+
+                    <input type="file" id="xlsx-upload" accept=".xlsx,.xls">
+                    <div class="upload-feedback"></div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="preview-mockup">
+                <div class="mockup-device"></div>
+                <div class="mockup-screen">
+                    <div class="mockup-ad">
+                        <div class="mockup-bg"></div>
+                        <div class="mockup-content">
+                            <div class="mockup-logo">🏢</div>
+                            <div class="mockup-text">
+                                <div class="mockup-headline">Transform Your Business</div>
+                                <div class="mockup-slogan">with Professional Ads</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Main layout -->
     <main class="user-main">
         <div class="user-container">
             <section class="user-panel">
-                <div class="panel-card">
-                    <h2>Upload Your Sheet</h2>
-                    <div class="upload-section">
-                        <label for="xlsx-upload">Select XLSX File:</label>
-                        <input type="file" id="xlsx-upload" accept=".xlsx,.xls">
-                        <div class="upload-feedback"></div>
-                    </div>
-                </div>
 
                 <div class="panel-card" id="batch-panel" style="display: none;">
                     <h2>Batch Processing</h2>

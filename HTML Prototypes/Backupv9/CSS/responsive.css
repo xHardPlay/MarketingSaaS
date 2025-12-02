@@ -1,0 +1,166 @@
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .app-main {
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+
+  .left-panel,
+  .right-panel {
+    min-width: 280px;
+  }
+
+  .center-panel {
+    max-width: 100%;
+  }
+
+  .canvas-container {
+    max-width: 100%;
+  }
+
+  .size-inputs input[type="number"] {
+    width: 80px;
+  }
+
+  .control-group input[type="number"] {
+    width: 70px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .app-main {
+    grid-template-columns: minmax(280px, 1fr) minmax(480px, 2fr) minmax(280px, 1fr);
+    gap: var(--spacing-sm);
+  }
+
+  .canvas-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .canvas-toolbar .btn {
+    justify-content: center;
+  }
+
+  .toolbar-spacer {
+    display: none;
+  }
+
+  .preset-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1024px) {
+  .left-panel,
+  .right-panel {
+    display: none;
+  }
+
+  .app-main {
+    grid-template-columns: 1fr;
+    padding: var(--spacing-md);
+  }
+
+  .center-panel {
+    min-width: 0;
+  }
+
+  .canvas-container {
+    max-width: 100%;
+  }
+
+  /* Todo: Add drawer behavior for panels on mobile */
+}
+
+/* Responsive Hero */
+@media (max-width: 1024px) {
+  .hero-landing {
+    flex-direction: column;
+    text-align: center;
+    min-height: auto;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-visual {
+    margin-top: var(--spacing-2xl);
+  }
+
+  .preview-mockup {
+    transform: scale(0.8);
+  }
+
+  .hero-cta-section {
+    margin-top: var(--spacing-xl);
+  }
+
+  .hero-upload-wrapper {
+    padding: var(--spacing-xl);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .hero-upload-btn {
+    min-width: 280px;
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
+
+  .hero-upload-btn .upload-text {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .hero-features {
+    justify-content: center;
+  }
+
+  .feature-item {
+    flex: 1 1 120px;
+    justify-content: center;
+  }
+
+  .hero-upload-btn {
+    min-width: 260px;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .hero-upload-btn .upload-icon {
+    font-size: 1.2rem;
+  }
+
+  .hero-upload-btn .upload-text {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .hero-upload-btn .upload-hint {
+    font-size: 0.8rem;
+  }
+
+  .hero-upload-wrapper .upload-visual {
+    flex-direction: column;
+    margin-bottom: var(--spacing-lg);
+    gap: var(--spacing-sm);
+  }
+
+  .hero-upload-wrapper .upload-feature {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .hero-upload-wrapper {
+    padding: var(--spacing-lg);
+  }
+}

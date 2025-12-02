@@ -44,25 +44,36 @@ xlsxInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Show loading animation
+    showLoadingAnimation();
+
     try {
-        const data = await file.arrayBuffer();
-        const workbook = XLSX.read(data);
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const json = XLSX.utils.sheet_to_json(worksheet);
+        // Parse XLSX file
+        let workbook, json;
+        try {
+            const data = await file.arrayBuffer();
+            workbook = XLSX.read(data);
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            json = XLSX.utils.sheet_to_json(worksheet);
+        } catch (xlsxError) {
+            throw new Error('XLSX_PARSE_ERROR');
+        }
+
         rowsData = json;
         if (rowsSummary) displayRowsSummary(json);
 
-        // Show batch processing panel after successful upload
-        const batchPanel = document.getElementById('batch-panel');
-        if (batchPanel) {
-            batchPanel.style.display = 'block';
-        }
-
-        // Auto-generate all ads immediately
+        // Auto-generate all ads immediately (batch panel removed from user view)
         await autoGenerateAds(json);
     } catch (error) {
-        alert('Error parsing XLSX file. Please ensure it is a valid Excel file.');
+        if (error.message === 'XLSX_PARSE_ERROR') {
+            console.error('XLSX parsing error:', error);
+            alert('Error parsing XLSX file. Please ensure it is a valid Excel file.');
+        } else {
+            console.error('Unexpected error during generation:', error);
+            // No user-facing alert for generation errors - app works despite minor issues
+        }
+        hideLoadingAnimation();
     }
 });
 
@@ -133,7 +144,8 @@ function displayRowsSummary(rows) {
 
 // Auto-generate all ads function
 async function autoGenerateAds(rows) {
-    batchFeedback.textContent = 'Generating ads...';
+    // Update loading text to show progress
+    updateLoadingText('Generating ads...');
 
     // Disable generate button during auto-generation
     generateAllBtn.disabled = true;
@@ -144,6 +156,7 @@ async function autoGenerateAds(rows) {
 
     for (const [index, row] of rows.entries()) {
         try {
+            updateLoadingText(`Creating ad ${processed + 1}/${total}...`);
             const dataURL = await generateAdForRow(row, index);
             generatedAds.push({
                 index,
@@ -152,30 +165,49 @@ async function autoGenerateAds(rows) {
                 company: row['Client Company Name'] || 'Unknown'
             });
             processed++;
-            batchFeedback.textContent = `Auto-generating ${processed}/${total} ads...`;
         } catch (error) {
             console.error('Error generating ad for row', index, error);
-            batchFeedback.textContent = `Error auto-generating ad ${index + 1}, continuing...`;
+            updateLoadingText(`Error with ad ${index + 1}, continuing...`);
         }
     }
 
-    batchFeedback.textContent = `Auto-generation complete: ${generatedAds.length}/${total} ads created.`;
+    updateLoadingText(`Complete! Generated ${generatedAds.length}/${total} ads.`);
     if (generatedAds.length > 0) {
         displayAdPreviews();
-        adPreviews.style.display = 'block';
+        if (adPreviews) {
+            adPreviews.style.display = 'block';
 
-        // Hide upload and batch processing panels, keep only the preview section
-        const uploadPanel = document.querySelector('.panel-card h2');
-        if (uploadPanel && uploadPanel.textContent === 'Upload Your Sheet') {
-            uploadPanel.parentElement.style.display = 'none';
+            // Hide upload and batch processing panels, keep only the preview section
+            const uploadPanel = document.querySelector('.panel-card h2');
+            if (uploadPanel && uploadPanel.textContent === 'Upload Your Sheet') {
+                uploadPanel.parentElement.style.display = 'none';
+            }
+            const batchPanel = document.querySelector('.user-panel .panel-card:nth-child(2)');
+            if (batchPanel) {
+                batchPanel.style.display = 'none'; // Batch Processing panel
+            }
+
+            // Expand the layout to use full screen space for previews
+            const userMain = document.querySelector('.user-main');
+            const userContainer = document.querySelector('.user-container');
+            if (userMain) userMain.classList.add('full-width');
+            if (userContainer) userContainer.classList.add('full-width');
+            adPreviews.classList.add('full-screen');
         }
-        document.querySelector('.user-panel .panel-card:nth-child(2)').style.display = 'none'; // Batch Processing panel
-
-        // Expand the layout to use full screen space for previews
-        document.querySelector('.user-main').classList.add('full-width');
-        document.querySelector('.user-container').classList.add('full-width');
-        adPreviews.classList.add('full-screen');
     }
+
+    // Small delay to show completion message, then hide loading and scroll to results
+    setTimeout(() => {
+        hideLoadingAnimation();
+        if (generatedAds.length > 0 && adPreviews) {
+            setTimeout(() => {
+                adPreviews.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 300);
+        }
+    }, 800);
 
     // Re-enable button after generation (though it's hidden, for consistency)
     generateAllBtn.disabled = false;
@@ -195,5 +227,41 @@ async function previewAd(index) {
     } catch (error) {
         console.error('Error previewing ad:', error);
         alert('Error generating preview. Check console for details.');
+    }
+}
+
+// Loading animation functions
+function showLoadingAnimation() {
+    // Create loading overlay if it doesn't exist
+    let loadingOverlay = document.getElementById('loading-overlay');
+    if (!loadingOverlay) {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.id = 'loading-overlay';
+        loadingOverlay.innerHTML = `
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading elements...</div>
+            </div>
+        `;
+        document.body.appendChild(loadingOverlay);
+    }
+    loadingOverlay.style.display = 'flex';
+    // Prevent scrolling while loading
+    document.body.style.overflow = 'hidden';
+}
+
+function hideLoadingAnimation() {
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.display = 'none';
+    }
+    // Restore scrolling
+    document.body.style.overflow = '';
+}
+
+function updateLoadingText(text) {
+    const loadingText = document.querySelector('.loading-text');
+    if (loadingText) {
+        loadingText.textContent = text;
     }
 }
