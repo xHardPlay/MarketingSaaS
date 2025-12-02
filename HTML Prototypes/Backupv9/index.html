@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Generator</title>
+    <title>Generador de Anuncios</title>
     <link rel="stylesheet" href="CSS/variables.css">
     <link rel="stylesheet" href="CSS/base.css">
     <link rel="stylesheet" href="CSS/layout.css">
@@ -15,13 +15,13 @@
     <link rel="stylesheet" href="CSS/responsive.css">
 </head>
 <body>
-    <!-- App bar -->
+    <!-- Barra de aplicación -->
     <header class="app-bar">
         <div class="app-bar-content">
-            <h1 class="app-title">Ad Generator</h1>
+            <h1 class="app-title">Generador de Anuncios</h1>
             <div class="app-bar-actions">
-                <!-- Regresar a modo admin? -->
-                <a href="admin.html" class="btn btn-secondary">Admin Mode</a>
+                <a href="about.html" class="btn btn-secondary">Acerca de</a>
+                <a href="admin.html" class="btn btn-secondary">Modo Admin</a>
             </div>
         </div>
     </header>
@@ -32,28 +32,34 @@
     <!-- Hero Landing Section -->
     <section class="hero-landing">
         <div class="hero-content">
-            <h1 class="hero-title"> transform your data into stunning ads <span class="hero-accent">instantly</span></h1>
+            <h1 class="hero-title">Transforma tus datos en anuncios <span class="hero-accent">impresionantes al instante</span></h1>
             <p class="hero-description">
-                Upload your Excel sheet with client information, slogans, and images.
-                Our AI-powered tool will automatically generate professional social media ads
-                that capture attention and drive results.
+                Sube tu información y nuestra herramienta con IA generará automáticamente anuncios profesionales
+                para redes sociales que captan la atención y generan resultados.
             </p>
                 <div class="hero-features">
                 <div class="feature-item">
                     <div class="feature-icon">⚡</div>
-                    <span>Lightning Fast</span>
+                    <span>Relámpago Rápido</span>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">🎨</div>
-                    <span>Professional Design</span>
+                    <span>Diseño Profesional</span>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">📦</div>
-                    <span>Batch Processing</span>
-                </div>
+                    <span>Procesamiento por Lotes</span>
+                </div>             
                 <div class="feature-item">
-                    <div class="feature-icon">💾</div>
-                    <span>ZIP Download</span>
+                    <div class="feature-icon">😄</div>
+                    <span>Comparte en Redes Sociales</span>
+                </div>
+                  <div class="feature-item">
+                    <div class="feature-icon">😄</div>
+                    <span>Comparte en Redes Sociales</span>
+                </div>  <div class="feature-item">
+                    <div class="feature-icon">👍</div>
+                    <span>Fácil de usar</span>
                 </div>
             </div>
 
@@ -64,8 +70,8 @@
 
                     <label class="primary-upload-btn hero-upload-btn" for="xlsx-upload">
                         <div class="upload-icon">🚀</div>
-                        <div class="upload-text">Start Creating Ads</div>
-                        <div class="upload-hint">Upload Excel → Get Professional Ads</div>
+                        <div class="upload-text">Comenzar a Crear Anuncios</div>
+                        <div class="upload-hint">Subir Excel → Obtener Anuncios Profesionales</div>
                     </label>
 
                     <input type="file" id="xlsx-upload" accept=".xlsx,.xls" style="display: none;">
@@ -82,8 +88,8 @@
                         <div class="mockup-content">
                             <div class="mockup-logo">🏢</div>
                             <div class="mockup-text">
-                                <div class="mockup-headline">Transform Your Business</div>
-                                <div class="mockup-slogan">with Professional Ads</div>
+                                <div class="mockup-headline">Transforma Tu Negocio</div>
+                                <div class="mockup-slogan">con Anuncios Profesionales</div>
                             </div>
                         </div>
                     </div>
@@ -98,18 +104,17 @@
             <section class="user-panel">
 
                 <div class="panel-card" id="batch-panel" style="display: none;">
-                    <h2>Batch Processing</h2>
-                    <button id="generate-all-btn" class="btn btn-secondary large-btn" disabled>Regenerate All Ads</button>
+                    <h2>Procesamiento por Lotes</h2>
+                    <button id="generate-all-btn" class="btn btn-secondary large-btn" disabled>Regenerar Todos los Anuncios</button>
                     <div id="batch-feedback"></div>
                 </div>
 
                 <!-- Ad Previews -->
                 <div id="ad-previews" class="ad-previews-user" style="display: none; align-items: center;">
-                    <h3>Generated Ads Preview</h3>
+                    <h3>Vista Previa de Anuncios Generados</h3>
                     <div id="previews-container"></div>
-                    <button id="download-all-btn" class="btn btn-primary large-btn" style="margin-top: 30px;align-items: center;">Download All Ads (ZIP)</button>
-                    <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>GHL Export</button>
-                <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>Share</button>
+                    <button id="download-all-btn" class="btn btn-primary large-btn" style="margin-top: 30px;align-items: center;">Descargar Todos los Anuncios (ZIP)</button>
+                    <button id="ghl-export-btn" class="btn btn-secondary large-btn" disabled>Exportación GHL</button>
                 </div>
 
                 <!-- Modal for viewing full ad -->
@@ -117,15 +122,15 @@
                     <div class="modal-content modal-split">
                         <span id="modal-close" class="modal-close">&times;</span>
                         <div class="modal-left">
-                            <img id="modal-image" class="modal-image" src="" alt="Full Ad View">
+                            <img id="modal-image" class="modal-image" src="" alt="Vista Completa del Anuncio">
                         </div>
                         <div class="modal-right">
-                            <h4>Ad Details</h4>
+                            <h4>Detalles del Anuncio</h4>
                             <div id="modal-ad-data"></div>
                         </div>
         <div class="modal-actions">
-            <button id="modal-download-btn" class="btn btn-primary">Download</button>
-            <button id="modal-share-btn" class="btn btn-secondary">Share</button>
+            <button id="modal-download-btn" class="btn btn-primary">Descargar</button>
+            <button id="modal-share-btn" class="btn btn-secondary">Compartir</button>
         </div>
                     </div>
                 </div>
@@ -177,17 +182,17 @@
                 const url = modalImg.src;
                 if (navigator.share) {
                     navigator.share({
-                        title: 'Generated Ad',
-                        text: 'Check out this awesome ad I created!',
+                        title: 'Anuncio Generado',
+                        text: '¡Mira este increíble anuncio que creé!',
                         url: url
                     });
                 } else {
                     // Fallback to copying URL to clipboard
                     navigator.clipboard.writeText(url).then(function() {
-                        alert('Ad image URL copied to clipboard!');
+                        alert('¡URL de la imagen del anuncio copiada al portapapeles!');
                     }).catch(function() {
                         // Fallback for older browsers
-                        alert('Share URL: ' + url);
+                        alert('URL para compartir: ' + url);
                     });
                 }
             };
